@@ -1,4 +1,4 @@
-# Express MongoDB Boilerplate
+# Express MySQL Boilerplate
 Boilerplate REST API with express and MySQL (sequelize ORM)
 
 ## Installation
