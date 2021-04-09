@@ -2,7 +2,7 @@
   "name": "express-mysql-boilerplate",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "",
+  "repository": "git@github.com:abdul15irsyad/express-mysql-boilerplate.git",
   "author": "Irsyad Abdul <abdulirsyad15@gmail.com>",
   "scripts": {
     "dev": "npx nodemon index.js",
