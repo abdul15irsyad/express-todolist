@@ -20,7 +20,7 @@ or
 npm run dev
 ```
 
-3. make a file named `.env` paste mongoDB uri to connect the database (you can also edit `.env.sample` and then rename it to `.env`)
+3. make a file named `.env` and set your database setting to connect the database (you can also edit `.env.sample` and then rename it to `.env`)
 
 4. open browser at [http://localhost:8001](http://localhost:8001), if you didn't change the port
 
