@@ -1,4 +1,5 @@
 'use strict'
+const { validationResult } = require('express-validator')
 const { Book } = require('../models')
 const { toSlug } = require('../utils/string')
 
@@ -30,6 +31,15 @@ const bookController = {
     },
     getBookById: async (req, res) => {
         try {
+            // if validation failed
+            let errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                return res.status(400).json({
+                    status: false,
+                    message: 'validation failed',
+                    errors: errors.array({ onlyFirstError: true })
+                })
+            }
             const book = await Book.findByPk(req.params.id, {
                 attributes: {
                     exclude: ['authorId']
@@ -62,6 +72,15 @@ const bookController = {
     },
     createBook: async (req, res) => {
         try {
+            // if validation failed
+            let errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                return res.status(400).json({
+                    status: false,
+                    message: 'validation failed',
+                    errors: errors.array({ onlyFirstError: true })
+                })
+            }
             const book = new Book
             book.title = req.body.title
             book.slug = toSlug(req.body.title)
@@ -82,6 +101,15 @@ const bookController = {
     },
     updateBookById: async (req, res) => {
         try {
+            // if validation failed
+            let errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                return res.status(400).json({
+                    status: false,
+                    message: 'validation failed',
+                    errors: errors.array({ onlyFirstError: true })
+                })
+            }
             const book = await Book.findByPk(req.params.id, {
                 attributes: {
                     exclude: ['authorId']
@@ -118,6 +146,15 @@ const bookController = {
     },
     deleteBookById: async (req, res) => {
         try {
+            // if validation failed
+            let errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                return res.status(400).json({
+                    status: false,
+                    message: 'validation failed',
+                    errors: errors.array({ onlyFirstError: true })
+                })
+            }
             const book = await Book.findByPk(req.params.id)
             // if no book
             if (!book) {

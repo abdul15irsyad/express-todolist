@@ -19,6 +19,7 @@ const db = {
     Book: Book(sequelize, Sequelize.DataTypes),
 };
 
+// load associate model
 Object.keys(db).forEach(model => {
     if (db[model].associate) {
         db[model].associate(db);

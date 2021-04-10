@@ -1,5 +1,6 @@
 'use strict'
 const bcrypt = require('bcryptjs')
+const { validationResult } = require('express-validator')
 const { User } = require('../models')
 
 const userController = {
@@ -30,6 +31,15 @@ const userController = {
     },
     getUserById: async (req, res) => {
         try {
+            // if validation failed
+            let errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                return res.status(400).json({
+                    status: false,
+                    message: 'validation failed',
+                    errors: errors.array({ onlyFirstError: true })
+                })
+            }
             const user = await User.findByPk(req.params.id, {
                 attributes: {
                     exclude: ['password']
@@ -62,6 +72,15 @@ const userController = {
     },
     updateUserById: async (req, res) => {
         try {
+            // if validation failed
+            let errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                return res.status(400).json({
+                    status: false,
+                    message: 'validation failed',
+                    errors: errors.array({ onlyFirstError: true })
+                })
+            }
             const user = await User.findByPk(req.params.id, {
                 attributes: {
                     exclude: ['password']
@@ -103,6 +122,15 @@ const userController = {
     },
     deleteUserById: async (req, res) => {
         try {
+            // if validation failed
+            let errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                return res.status(400).json({
+                    status: false,
+                    message: 'validation failed',
+                    errors: errors.array({ onlyFirstError: true })
+                })
+            }
             const user = await User.findByPk(req.params.id)
             // if no user
             if (!user) {

@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs')
+const { validationResult } = require('express-validator')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
 const { User } = require('../models')
@@ -38,7 +39,7 @@ const authController = {
             const token = jwt.sign(
                 { username: user.username },
                 process.env.JWT_SECRET,
-                { expiresIn: '12h' }
+                { expiresIn: '1m' }
             )
             return res.status(200).json({
                 message: 'login success',
@@ -54,6 +55,15 @@ const authController = {
     },
     signup: async (req, res) => {
         try {
+            // if validation failed
+            let errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                return res.status(400).json({
+                    status: false,
+                    message: 'validation failed',
+                    errors: errors.array({ onlyFirstError: true })
+                })
+            }
             // create user
             const user = new User
             user.name = req.body.name
@@ -69,6 +79,20 @@ const authController = {
                 status: true,
                 msg: 'signup success',
                 user
+            })
+        } catch (error) {
+            return res.status(500).json({
+                status: false,
+                msg: error.message
+            })
+        }
+    },
+    getUser: async (req, res) => {
+        try {
+            return res.status(200).json({
+                status: true,
+                msg: 'get auth user',
+                user: req.user
             })
         } catch (error) {
             return res.status(500).json({
