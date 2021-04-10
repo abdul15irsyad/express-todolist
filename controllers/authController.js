@@ -1,10 +1,10 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { Op } = require('sequelize');
-const { User } = require('../models');
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const { Op } = require('sequelize')
+const { User } = require('../models')
 
 const authController = {
-    loginUser: async (req, res) => {
+    login: async (req, res) => {
         try {
             // find user
             const user = await User.findOne({
@@ -14,37 +14,37 @@ const authController = {
                         { email: req.body.username },
                     ]
                 }
-            });
+            })
             // if there is no user
             if (!user) {
                 return res.status(400).json({
                     status: false,
                     msg: 'username or password is incorrect'
-                });
+                })
             }
             // check password
             const passwordMatch = await bcrypt.compare(
                 req.body.password,
                 user.password
-            );
+            )
             // if password is incorrect
             if (!passwordMatch) {
                 return res.status(400).json({
                     status: false,
                     msg: 'username or password is incorrect'
-                });
+                })
             }
             // generate jwt token from user
             const token = jwt.sign(
                 { username: user.username },
                 process.env.JWT_SECRET,
                 { expiresIn: '12h' }
-            );
+            )
             return res.status(200).json({
                 message: 'login success',
                 username: user.username,
                 token
-            });
+            })
         } catch (error) {
             return res.status(500).json({
                 status: false,
@@ -52,19 +52,24 @@ const authController = {
             })
         }
     },
-    signupUser: async (req, res) => {
+    signup: async (req, res) => {
         try {
-            // hash the password
-            const SALT_WORK_FACTOR = 5;
-            const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
-            req.body.password = await bcrypt.hash(req.body.password, salt);
             // create user
-            const user = await User.create(req.body);
+            const user = new User
+            user.name = req.body.name
+            user.username = req.body.username
+            user.email = req.body.email
+            user.gender = req.body.gender
+            // hash the password
+            const SALT_WORK_FACTOR = 5
+            const salt = await bcrypt.genSalt(SALT_WORK_FACTOR)
+            user.password = await bcrypt.hash(req.body.password, salt)
+            await user.save()
             return res.status(200).json({
                 status: true,
                 msg: 'signup success',
                 user
-            });
+            })
         } catch (error) {
             return res.status(500).json({
                 status: false,

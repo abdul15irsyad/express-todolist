@@ -60,6 +60,26 @@ const bookController = {
             })
         }
     },
+    createBook: async (req, res) => {
+        try {
+            const book = new Book
+            book.title = req.body.title
+            book.slug = toSlug(req.body.title)
+            book.desc = req.body.desc
+            book.authorId = req.body.authorId
+            await book.save()
+            return res.status(200).json({
+                status: true,
+                msg: 'create book success',
+                book
+            })
+        } catch (error) {
+            return res.status(500).json({
+                status: false,
+                msg: error.message
+            })
+        }
+    },
     updateBookById: async (req, res) => {
         try {
             const book = await Book.findByPk(req.params.id, {
