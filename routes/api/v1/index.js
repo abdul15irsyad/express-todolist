@@ -1,14 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
-const { authMiddleware } = require('../../../middlewares')
-const auth = require('./auth')
-const user = require('./user')
-const book = require('./book')
+const todolists = require('./todolists')
 
-router.use('/auth', auth)
-router.use(authMiddleware.isAuthenticated)
-router.use('/user', user)
-router.use('/book', book)
+router.use('/todolists', todolists)
 
 module.exports = router

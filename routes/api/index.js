@@ -6,7 +6,7 @@ const v1 = require('./v1')
 router.get('/', (req, res) => {
     return res.status(200).json({
         status: true,
-        msg: 'welcome to express mysql boilerplate'
+        msg: 'welcome to express todolist'
     })
 })
 router.use('/v1', v1)
